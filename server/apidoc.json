@@ -1,0 +1,9 @@
+{
+  "name": "Whistler API",
+  "version": "0.0.0",
+  "description": "REST API documentation for Whistler error reporting service.",
+  "title": "Whistler API Documentation",
+  "url": "http://localhost/api",
+  "sampleUrl": "http://localhost/api"
+}
+
