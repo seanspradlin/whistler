@@ -1,0 +1,33 @@
+version: "3.1"
+services:
+  app:
+    container_name: whistler-server
+    build: .
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - 8080
+    links:
+      - mongo
+  static:
+    container_name: whistler-client
+    build: ../whistler-client
+    command: npm run dev
+    ports:
+      - 8000
+    volumes:
+      - ../whistler-client:/usr/src/static
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+      - 27017:27017
+  nginx:
+    container_name: nginx
+    build: ./nginx
+    links:
+      - app:app
+      - static:static
+    ports:
+      - 80:80
+
