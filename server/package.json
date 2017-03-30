@@ -24,9 +24,11 @@
   "homepage": "https://github.com/seanspradlin/whistler-server#readme",
   "dependencies": {
     "apidoc": "^0.17.5",
+    "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
     "helmet": "^3.5.0",
+    "mongoose": "^4.9.2",
     "nodemon": "^1.11.0",
     "winston": "^2.3.1"
   },
