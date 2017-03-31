@@ -1,26 +1,18 @@
 const mongoose = require('../lib/mongoose');
 
 const Schema = mongoose.Schema;
-const schema = new Schema({
-  service: {
+
+const Comment = new Schema({
+  author: {
     type: Schema.Types.ObjectId,
-    ref: 'Service',
+    ref: 'User',
   },
-  comments: [{
-    author: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-    },
-    created: Date,
-    updated: Date,
-    body: String,
-  }],
   created: Date,
   updated: Date,
-  details: Schema.Types.Mixed,
+  body: String,
 });
 
-schema.pre('save', (next) => {
+Comment.pre('save', (next) => {
   if (!this.created) {
     this.created = new Date();
   }
@@ -28,5 +20,24 @@ schema.pre('save', (next) => {
   next();
 });
 
-module.exports = mongoose.model('Ticket', schema);
+const Ticket = new Schema({
+  service: {
+    type: Schema.Types.ObjectId,
+    ref: 'Service',
+  },
+  comments: [Comment],
+  created: Date,
+  updated: Date,
+  details: Schema.Types.Mixed,
+});
+
+Ticket.pre('save', (next) => {
+  if (!this.created) {
+    this.created = new Date();
+  }
+  this.updated = new Date();
+  next();
+});
+
+module.exports = mongoose.model('Ticket', Ticket);
 
