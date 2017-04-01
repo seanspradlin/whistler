@@ -48,7 +48,6 @@ function redeemGoogleToken(token) {
  * @apiSuccess  {String}    name      Name
  * @apiSuccess  {String}    email     Email
  *
- * @apiUse UnprocessableEntityError
  * @apiUse UnauthorizedError
  */
 router.post('/google', (req, res, next) => {
