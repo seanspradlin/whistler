@@ -16,10 +16,12 @@ module.exports = {
       maxAge: 5 * 60 * 60 * 1000, // 5 hours
       secure: process.env.NODE_ENV === 'production',
     },
+    resave: true,
+    saveUninitialized: true,
     name: 'whstlr-sid',
     proxy: true,
     rolling: true,
     secret: process.env.SESSION_SECRET || 'hunter2',
-  }
+  },
 };
 

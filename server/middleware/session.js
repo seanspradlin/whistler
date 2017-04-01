@@ -1,5 +1,5 @@
 const session = require('express-session');
-const RedisStore = require('connect-redis');
+const RedisStore = require('connect-redis')(session);
 const config = require('../config');
 
 module.exports = () => {

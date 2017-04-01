@@ -9,6 +9,7 @@ services:
       - 8080
     links:
       - mongo
+      - redis
   static:
     build: ./client
     ports:
@@ -27,4 +28,8 @@ services:
       - static:static
     ports:
       - 80:80
+  redis:
+    image: redis
+    ports:
+      - 6379
 
