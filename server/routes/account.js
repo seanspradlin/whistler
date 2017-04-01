@@ -29,7 +29,7 @@ function redeemGoogleToken(token) {
  * @api {get} /account Get account data
  * @apiName GetAccount
  * @apiGroup Account
- * @apiVersion 1.0.0
+ * @apiVersion 0.1.0
  *
  * @apiUse UnauthorizedError
  *
@@ -40,6 +40,7 @@ function redeemGoogleToken(token) {
  * @api {post} /account/google Login with Google
  * @apiName PostAccountGoogle
  * @apiGroup Account
+ * @apiVersion 0.1.0
  * @apiDescription Use Google to log in and then send their access token to generate a user session
  *
  * @apiParam {String} accessToken Google account access token
