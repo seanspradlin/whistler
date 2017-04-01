@@ -2,6 +2,7 @@ version: "3.1"
 services:
   app:
     build: ./server
+    env_file: .env
     volumes:
       - ./server:/usr/src/app
       - /usr/src/app/node_modules
@@ -12,6 +13,7 @@ services:
       - redis
   static:
     build: ./client
+    env_file: .env
     ports:
       - 8000
     volumes:
