@@ -13,6 +13,7 @@
     "pug": "^2.0.0-beta11",
     "pug-loader": "^2.3.0",
     "vue": "^2.2.2",
+    "vue-resource": "^1.2.1",
     "vue-router": "^2.2.0"
   },
   "devDependencies": {
