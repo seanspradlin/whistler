@@ -3,7 +3,7 @@ const account = require('./account');
 
 const router = express.Router();
 
-router.use('/', (req, res) => {
+router.all('/', (req, res) => {
   res.redirect('/api/docs');
 });
 
