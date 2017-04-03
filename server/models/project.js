@@ -14,13 +14,11 @@ const Project = new Schema({
   subscribers: [{
     isAdmin: {
       type: Boolean,
-      required: true,
       default: false,
     },
     user: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
     },
   }],
 });
