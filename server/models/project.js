@@ -11,15 +11,14 @@ const Project = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Service',
   }],
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
   subscribers: [{
-    isAdmin: {
-      type: Boolean,
-      default: false,
-    },
-    user: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-    },
+    type: Schema.Types.ObjectId,
+    ref: 'User',
   }],
 });
 
