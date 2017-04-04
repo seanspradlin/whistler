@@ -28,18 +28,7 @@ router.get('/', (req, res, next) => {
   if (!req.session.user) {
     next(new Errors.Unauthorized());
   } else {
-    const options = {
-      subscribers: {
-        $elemMatch: {
-          user: req.session._id,
-        },
-      },
-    };
-
-    if (req.body.name) {
-      options.name = req.body.name;
-    }
-    Project.find(options)
+    Project.find({ name: req.body.name })
       .then((projects) => {
         res.body = projects;
         next();
@@ -69,14 +58,7 @@ router.get('/:projectId', (req, res, next) => {
   if (!req.session.user) {
     next(new Errors.Unauthorized());
   } else {
-    Project.findOne({
-      _id: req.params.projectId,
-      subscribers: {
-        $elemMatch: {
-          user: req.session._id,
-        },
-      },
-    })
+    Project.findById(req.params.projectId)
       .then((project) => {
         res.body = project;
         next();
@@ -108,11 +90,9 @@ router.post('/', (req, res, next) => {
   } else {
     const project = new Project({
       name: req.body.name,
+      owner: req.session.user._id,
     });
-    project.subscribers.push({
-      isAdmin: true,
-      user: req.session._id,
-    });
+    project.subscribers.push(req.session.user._id);
     project.save()
       .then((newProject) => {
         res.body = newProject;
@@ -139,6 +119,24 @@ router.post('/', (req, res, next) => {
  * @apiPermission user
  */
 router.put('/:projectId', (req, res, next) => {
+  if (!req.session.user) {
+    next(new Errors.Unauthorized());
+  } else {
+    Project.findById(req.params.projectId)
+      .then((project) => {
+        if (!project.owner !== req.session.user._id) {
+          return Promise.reject(new Errors.Unauthorized());
+        }
+        project.name = req.body.name || project.name;
+        project.owner = req.body.owner || project.owner;
+        return project.save();
+      })
+      .then((response) => {
+        res.body = response;
+        next();
+      })
+      .catch(next);
+  }
   next(new Errors.Generic('Not implemented', 500));
 });
 
@@ -155,7 +153,22 @@ router.put('/:projectId', (req, res, next) => {
  * @apiPermission user
  */
 router.delete('/:projectId', (req, res, next) => {
-  next(new Errors.Generic('Not implemented', 500));
+  if (!req.session.user) {
+    next(new Errors.Unauthorized());
+  } else {
+    Project.findById(req.params.projectId)
+      .then((project) => {
+        if (project.owner !== req.session.user._id) {
+          return Promise.reject(new Errors.Unauthorized());
+        }
+        return project.remove();
+      })
+      .then(() => {
+        res.status(204);
+        next();
+      })
+      .catch(next);
+  }
 });
 
 module.exports = router;
