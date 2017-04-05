@@ -1,6 +1,6 @@
 const express = require('express');
-const Project = require('../../models').Project;
-const Errors = require('../../lib/errors');
+const Project = require('../models').Project;
+const Errors = require('../lib/errors');
 
 const router = express.Router({ mergeParams: true });
 
