@@ -28,7 +28,13 @@ router.get('/', (req, res, next) => {
   if (!req.session.user) {
     next(new Errors.Unauthorized());
   } else {
-    Project.find({ name: req.body.name })
+    const options = {};
+    if (req.body.name) {
+      options.name = req.body.name;
+    }
+
+    Project.find(options)
+      .populate(['owner', 'subscribers', 'processes'])
       .then((projects) => {
         res.body = projects;
         next();
@@ -59,6 +65,7 @@ router.get('/:projectId', (req, res, next) => {
     next(new Errors.Unauthorized());
   } else {
     Project.findById(req.params.projectId)
+      .populate(['owner', 'subscribers', 'processes'])
       .then((project) => {
         res.body = project;
         next();
