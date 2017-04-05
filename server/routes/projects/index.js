@@ -144,7 +144,6 @@ router.put('/:projectId', (req, res, next) => {
       })
       .catch(next);
   }
-  next(new Errors.Generic('Not implemented', 500));
 });
 
 /**
