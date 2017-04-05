@@ -131,7 +131,7 @@ router.put('/:projectId', (req, res, next) => {
   } else {
     Project.findById(req.params.projectId)
       .then((project) => {
-        if (!project.owner !== req.session.user._id) {
+        if (`${project.owner}` !== req.session.user._id) {
           return Promise.reject(new Errors.Unauthorized());
         }
         project.name = req.body.name || project.name;
