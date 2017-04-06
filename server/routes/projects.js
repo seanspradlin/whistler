@@ -49,6 +49,8 @@ router.get('/', (req, res, next) => {
  * @apiGroup Projects
  * @apiVersion 0.1.0
  *
+ * @apiParam  {String}  projectId
+ *
  * @apiSuccess  {String}    _id
  * @apiSuccess  {String}    name
  * @apiSuccess  {Process[]} processes
