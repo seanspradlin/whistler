@@ -1,4 +1,5 @@
 const express = require('express');
+const Service = require('../models').Service;
 const Errors = require('../lib/errors');
 
 const router = express.Router({ mergeParams: true });
@@ -24,7 +25,29 @@ const router = express.Router({ mergeParams: true });
  * @apiPermission user
  */
 router.get('/', (req, res, next) => {
-  next(new Errors.Generic('Not implemented', 501));
+  if (!req.session.user) {
+    next(new Errors.Unauthorized());
+  } else {
+    const options = {};
+    if (req.body.name) {
+      options.name = req.body.name;
+    }
+
+    if (req.body.environment) {
+      options.environment = req.body.environment;
+    }
+
+    if (req.body.project) {
+      options.project = req.body.project;
+    }
+
+    Service.find(options)
+      .then((services) => {
+        res.body = services;
+        next();
+      })
+      .catch(next);
+  }
 });
 
 /**
@@ -45,7 +68,16 @@ router.get('/', (req, res, next) => {
  * @apiPermission user
  */
 router.get('/', (req, res, next) => {
-  next(new Errors.Generic('Not implemented', 501));
+  if (!req.session.user) {
+    next(new Errors.Unauthorized());
+  } else {
+    Service.findById(req.params.serviceId)
+      .then((service) => {
+        res.body = service;
+        next();
+      })
+      .catch(next);
+  }
 });
 
 /**
@@ -68,7 +100,23 @@ router.get('/', (req, res, next) => {
  * @apiPermission user
  */
 router.post('/', (req, res, next) => {
-  next(new Errors.Generic('Not implemented', 501));
+  if (!req.session.user) {
+    next(new Errors.Unauthorized());
+  } else if (!req.body.name || !req.body.environment || !req.body.project) {
+    next(new Errors.Generic('Name, environment, and project required'));
+  } else {
+    const service = new Service({
+      name: req.body.name,
+      environment: req.body.environment,
+      project: req.body.project,
+    });
+    service.save()
+      .then((newService) => {
+        res.body = newService;
+        next();
+      })
+      .catch(next);
+  }
 });
 
 /**
@@ -92,7 +140,22 @@ router.post('/', (req, res, next) => {
  * @apiPermission user
  */
 router.put('/:serviceId', (req, res, next) => {
-  next(new Errors.Generic('Not implemented', 501));
+  if (!req.session.user) {
+    next(new Errors.Unauthorized());
+  } else {
+    Service.findById(req.params.serviceId)
+      .then((service) => {
+        service.name = req.body.name || service.name;
+        service.environment = req.body.environment || service.environment;
+        service.project = req.body.project || service.project;
+        return service.save();
+      })
+      .then((response) => {
+        res.body = response;
+        next();
+      })
+      .catch(next);
+  }
 });
 
 /**
@@ -108,7 +171,17 @@ router.put('/:serviceId', (req, res, next) => {
  * @apiPermission user
  */
 router.delete('/:serviceId', (req, res, next) => {
-  next(new Errors.Generic('Not implemented', 501));
+  if (!req.session.user) {
+    next(new Errors.Unauthorized());
+  } else {
+    Service.findById(req.params.serviceId)
+      .remove()
+      .then(() => {
+        res.status(204);
+        next();
+      })
+      .catch(next);
+  }
 });
 
 module.exports = router;
