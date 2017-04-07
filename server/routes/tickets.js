@@ -1,4 +1,5 @@
 const express = require('express');
+const Ticket = require('../models').Ticket;
 const Errors = require('../lib/errors');
 
 const router = express.Router({ mergeParams: true });
@@ -25,7 +26,21 @@ const router = express.Router({ mergeParams: true });
  * @apiPermission user
  */
 router.get('/', (req, res, next) => {
-  next(new Errors.Generic('Not implemented', 501));
+  if (!req.session.user) {
+    next(new Errors.Unauthorized());
+  } else {
+    const options = {};
+    if (req.body.service_id) {
+      options.service = req.body.service_id;
+    }
+
+    Ticket.find(options)
+      .then((tickets) => {
+        res.body = tickets;
+        next();
+      })
+      .catch(next);
+  }
 });
 
 /**
