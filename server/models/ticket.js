@@ -26,6 +26,7 @@ const Ticket = new Schema({
     ref: 'Service',
   },
   comments: [Comment],
+  completed: Date,
   created: Date,
   updated: Date,
   details: Schema.Types.Mixed,
