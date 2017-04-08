@@ -66,7 +66,16 @@ router.get('/', (req, res, next) => {
  * @apiPermission user
  */
 router.get('/:ticketId', (req, res, next) => {
-  next(new Errors.Generic('Not implemented', 501));
+  if (!req.session.user) {
+    next(new Errors.Unauthorized());
+  } else  {
+    Ticket.findById(req.params.ticketId)
+      .then((ticket) => {
+        res.body = ticket;
+        next();
+      })
+      .catch(next);
+  }
 });
 
 module.exports = router;
