@@ -4,6 +4,11 @@
  */
 
 /**
+ * @apiDefine service Services
+ * This resource can only be accessed by registered services.
+ */
+
+/**
  * @apiDefine public Public
  * Anyone can access this resource.
  */

@@ -14,6 +14,7 @@ const router = express.Router({ mergeParams: true });
  * @apiSuccess  {String}    tickets.service
  * @apiSuccess  {Date}      tickets.created
  * @apiSuccess  {Date}      tickets.updated
+ * @apiSuccess  {Date}      tickets.completed
  * @apiSuccess  {Object}    tickets.details
  * @apiSuccess  {Object[]}  tickets.comments
  * @apiSuccess  {String}    tickets.comments.author
@@ -54,6 +55,7 @@ router.get('/', (req, res, next) => {
  * @apiSuccess  {String}    service
  * @apiSuccess  {Date}      created
  * @apiSuccess  {Date}      updated
+ * @apiSuccess  {Date}      completed
  * @apiSuccess  {Object}    details
  * @apiSuccess  {Object[]}  comments
  * @apiSuccess  {String}    comments.author
@@ -77,6 +79,72 @@ router.get('/:ticketId', (req, res, next) => {
       .catch(next);
   }
 });
+
+/**
+ * @api {post} /tickets Create a ticket
+ * @apiName PostTickets
+ * @apiGroup Tickets
+ * @apiVersion 0.1.0
+ *
+ * @apiUse UnauthorizedError
+ *
+ * @apiPermission service
+ */
+
+/**
+ * @api {put} /tickets/:ticketId Update a ticket
+ * @apiName PutTicketsId
+ * @apiGroup Tickets
+ * @apiVersion 0.1.0
+ *
+ * @apiUse UnauthorizedError
+ *
+ * @apiPermission user
+ */
+
+/**
+ * @api {delete} /tickets/:ticketId Delete a ticket
+ * @apiName DeleteTicketsId
+ * @apiGroup Tickets
+ * @apiVersion 0.1.0
+ *
+ * @apiUse UnauthorizedError
+ *
+ * @apiPermission user
+ */
+
+/**
+ * @api {post} /tickets/:ticketId/comments Comment on a ticket
+ * @apiName PostTicketsIdComment
+ * @apiGroup Tickets
+ * @apiVersion 0.1.0
+ *
+ * @apiUse UnauthorizedError
+ *
+ * @apiPermission user
+ */
+
+/**
+ * @api {put} /tickets/:ticketId/comments/:commentId Update a ticket comment
+ * @apiName PutTicketsIdCommentId
+ * @apiGroup Tickets
+ * @apiVersion 0.1.0
+ *
+ * @apiUse UnauthorizedError
+ *
+ * @apiPermission user
+ */
+
+/**
+ * @api {delete} /tickets/:ticketId/comments/:commentId Delete a ticket comment
+ * @apiName DeleteTicketsIdCommentId
+ * @apiGroup Ticket
+ * @apiVersion 0.1.0
+ *
+ * @apiUse UnauthorizedError
+ *
+ * @apiPermission user
+ */
 
 module.exports = router;
 
