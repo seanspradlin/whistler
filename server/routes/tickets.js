@@ -127,11 +127,13 @@ router.post('/', (req, res, next) => {
  * @apiGroup Tickets
  * @apiVersion 0.1.0
  *
+ * @apiParam  {String}  ticketId
+ *
  * @apiUse UnauthorizedError
  *
  * @apiPermission user
  */
-router.post('/tickets/:ticketId', (req, res, next) => {
+router.post('/:ticketId', (req, res, next) => {
   if (!req.session.user) {
     next(new Errors.Unauthorized());
   } else {
@@ -154,11 +156,13 @@ router.post('/tickets/:ticketId', (req, res, next) => {
  * @apiGroup Tickets
  * @apiVersion 0.1.0
  *
+ * @apiParam  {String}  ticketId
+ *
  * @apiUse UnauthorizedError
  *
  * @apiPermission user
  */
-router.delete('/tickets/:ticketId', (req, res, next) => {
+router.delete('/:ticketId', (req, res, next) => {
   if (!req.session.user) {
     next(new Errors.Unauthorized());
   } else {
@@ -173,15 +177,77 @@ router.delete('/tickets/:ticketId', (req, res, next) => {
 });
 
 /**
+ * @api {get} /tickets/:ticketId/comments Get all ticket comments
+ * @apiName GetTicketsIdComment
+ * @apiGroup Tickets
+ * @apiVersion 0.1.0
+ *
+ * @apiParam  {String}  ticketId
+ *
+ * @apiSuccess  {Object[]}
+ * @apiSuccess  {String}  _id     Comment ID
+ * @apiSuccess  {String}  body    Comment contents
+ * @apiSuccess  {Date}    created Creation time
+ * @apiSuccess  {Date}    updated Update time
+ * @apiSuccess  {String}  author  Comment's author
+ *
+ * @apiUse UnauthorizedError
+ */
+router.get('/:ticketId/comments', (req, res, next) => {
+  if (!req.session.user) {
+    next(new Errors.Unauthorized());
+  } else {
+    Ticket.findById(req.params.ticketId)
+      .populate(['comments.author'])
+      .then((ticket) => {
+        res.body = ticket.comments;
+        next();
+      })
+      .catch(next);
+  }
+});
+
+/**
  * @api {post} /tickets/:ticketId/comments Comment on a ticket
  * @apiName PostTicketsIdComment
  * @apiGroup Tickets
  * @apiVersion 0.1.0
  *
+ * @apiParam  {String}  message Message contents for comment
+ *
+ * @apiSuccess  {String}  _id     Comment ID
+ * @apiSuccess  {String}  body    Comment contents
+ * @apiSuccess  {Date}    created Creation time
+ * @apiSuccess  {Date}    updated Update time
+ * @apiSuccess  {String}  author  Comment's author
+ *
  * @apiUse UnauthorizedError
  *
  * @apiPermission user
  */
+router.post('/:ticketId/comments', (req, res, next) => {
+  if (!req.session.user) {
+    next(new Errors.Unauthorized());
+  } else if (!req.body.message) {
+    next(new Errors.Generic('Message required', 400));
+  } else {
+    Ticket.findById(req.params.ticketId)
+      .then((ticket) => {
+        const comment = {
+          author: req.session.user._id,
+          body: req.body.message,
+        };
+        ticket.comments.push(comment);
+        return ticket.save()
+          .then(() => Promise.resolve(ticket.comments.pop()));
+      })
+      .then((comment) => {
+        res.body = comment;
+        next();
+      })
+      .catch(next);
+  }
+});
 
 /**
  * @api {put} /tickets/:ticketId/comments/:commentId Update a ticket comment
