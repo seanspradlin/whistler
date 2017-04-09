@@ -122,8 +122,8 @@ router.post('/', (req, res, next) => {
 
 
 /**
- * @api {put} /tickets/:ticketId Update a ticket
- * @apiName PutTicketsId
+ * @api {post} /tickets/:ticketId Close a ticket
+ * @apiName PostTicketsId
  * @apiGroup Tickets
  * @apiVersion 0.1.0
  *
@@ -131,6 +131,22 @@ router.post('/', (req, res, next) => {
  *
  * @apiPermission user
  */
+router.post('/tickets/:ticketId', (req, res, next) => {
+  if (!req.session.user) {
+    next(new Errors.Unauthorized());
+  } else {
+    Ticket.findById(req.params.ticketId)
+      .then((ticket) => {
+        ticket.completed = new Date();
+        return ticket.save();
+      })
+      .then(() => {
+        res.status(204);
+        next();
+      })
+      .catch(next);
+  }
+});
 
 /**
  * @api {delete} /tickets/:ticketId Delete a ticket
