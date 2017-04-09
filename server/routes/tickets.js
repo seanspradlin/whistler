@@ -1,7 +1,10 @@
 const express = require('express');
-const Ticket = require('../models').Ticket;
+const basicAuth = require('basic-auth');
+const models = require('../models');
 const Errors = require('../lib/errors');
 
+const Ticket = models.Ticket;
+const Service = models.Service;
 const router = express.Router({ mergeParams: true });
 
 /**
@@ -70,7 +73,7 @@ router.get('/', (req, res, next) => {
 router.get('/:ticketId', (req, res, next) => {
   if (!req.session.user) {
     next(new Errors.Unauthorized());
-  } else  {
+  } else {
     Ticket.findById(req.params.ticketId)
       .then((ticket) => {
         res.body = ticket;
@@ -85,11 +88,38 @@ router.get('/:ticketId', (req, res, next) => {
  * @apiName PostTickets
  * @apiGroup Tickets
  * @apiVersion 0.1.0
+ * @apiDescription Registered services will post errors information to this resource. All
+ * parameters passed into the request body will be recorded.
  *
  * @apiUse UnauthorizedError
  *
  * @apiPermission service
  */
+router.post('/', (req, res, next) => {
+  const credentials = basicAuth(req);
+  if (!credentials || !credentials.name || !credentials.pass) {
+    next(new Errors.Unauthorized());
+  } else {
+    Service.findById(credentials.name)
+      .then(service => service.authorize(credentials.pass))
+      .then(() => {
+        const currentTime = new Date();
+        const ticket = new Ticket({
+          created: currentTime,
+          updated: currentTime,
+          service: credentials.name,
+          details: req.body,
+        });
+        return ticket.save();
+      })
+      .then((ticket) => {
+        res.body = ticket;
+        next();
+      })
+      .catch(next);
+  }
+});
+
 
 /**
  * @api {put} /tickets/:ticketId Update a ticket
