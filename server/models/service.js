@@ -1,4 +1,7 @@
+const Promise = require('bluebird');
 const crypto = require('crypto');
+const bcrypt = require('bcrypt');
+const Errors = require('../lib/errors');
 const mongoose = require('../lib/mongoose');
 
 const Schema = mongoose.Schema;
@@ -12,10 +15,7 @@ const Service = new Schema({
     type: String,
     required: true,
   },
-  secret: {
-    type: String,
-    required: true,
-  },
+  secret: String,
   project: {
     type: Schema.Types.ObjectId,
     ref: 'Project',
@@ -23,17 +23,34 @@ const Service = new Schema({
   },
 });
 
-Service.methods.generateSecret = function generateSecret() {
-  this.secret = crypto.randomBytes(32).toString('base64');
-  return this.secret;
+Service.methods.updateSecret = function updateSecret() {
+  return new Promise((resolve, reject) => {
+    const secret = crypto.randomBytes(32).toString('base64');
+    this.secret = bcrypt.hash(secret, 10, (error, hash) => {
+      if (error) {
+        reject(error);
+      } else {
+        this.secret = hash;
+        resolve(secret);
+      }
+    });
+  });
 };
 
-Service.pre('save', (next) => {
-  if (!this.secret) {
-    this.generateSecret();
-  }
-  next();
-});
+Service.methods.authorize = function authorize(password) {
+  const hash = this.secret;
+  return new Promise((resolve, reject) => {
+    bcrypt.compare(password, hash, (err, match) => {
+      if (err) {
+        reject(err);
+      } else if (!match) {
+        reject(new Errors.Unauthorized());
+      } else {
+        resolve();
+      }
+    });
+  });
+};
 
 module.exports = mongoose.model('Service', Service);
 

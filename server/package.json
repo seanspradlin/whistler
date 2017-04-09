@@ -24,6 +24,8 @@
   "homepage": "https://github.com/seanspradlin/whistler-server#readme",
   "dependencies": {
     "apidoc": "^0.17.5",
+    "basic-auth": "^1.1.0",
+    "bcrypt": "^1.0.2",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
     "bunyan": "^1.8.9",
