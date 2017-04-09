@@ -5,7 +5,10 @@ module.exports = () =>
     res.statusCode = err.status || 500;
     res.body = { error: err.message };
     if (res.statusCode >= 500) {
-      req.error = err;
+      req.error = {
+        message: err.message,
+        stack: err.stack,
+      };
       logger.error({
         error: req,
       });
