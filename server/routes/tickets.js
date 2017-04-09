@@ -158,6 +158,19 @@ router.post('/tickets/:ticketId', (req, res, next) => {
  *
  * @apiPermission user
  */
+router.delete('/tickets/:ticketId', (req, res, next) => {
+  if (!req.session.user) {
+    next(new Errors.Unauthorized());
+  } else {
+    Ticket.findById(req.params.ticketId)
+      .then(ticket => ticket.remove())
+      .then(() => {
+        res.status(204);
+        next();
+      })
+      .catch(next);
+  }
+});
 
 /**
  * @api {post} /tickets/:ticketId/comments Comment on a ticket
