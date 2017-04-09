@@ -15,10 +15,10 @@ const router = express.Router({ mergeParams: true });
  * @apiParam  {String}  [project]     Unique ID of project
  *
  * @apiSuccess  {Object[]}  services
- * @apiSuccess  {String}    services._id     Unique ID
- * @apiSuccess  {String}    services.name    Name
- * @apiSuccess  {String}    services.secret  Authorization secret
- * @apiSuccess  {String}    services.project Unique ID of project
+ * @apiSuccess  {String}    services._id          Unique ID
+ * @apiSuccess  {String}    services.name         Name
+ * @apiSuccess  {String}    services.project      Unique ID of project
+ * @apiSuccess  {String}    services.environment  Environment of the service
  *
  * @apiUse UnauthorizedError
  *
@@ -43,7 +43,12 @@ router.get('/', (req, res, next) => {
 
     Service.find(options)
       .then((services) => {
-        res.body = services;
+        res.body = services.map(service => ({
+          _id: service._id,
+          name: service.name,
+          project: service.project,
+          environment: service.environment,
+        }));
         next();
       })
       .catch(next);
@@ -58,22 +63,27 @@ router.get('/', (req, res, next) => {
  *
  * @apiParam  {String}  serviceId
  *
- * @apiSuccess  {String}  _id     Unique ID
- * @apiSuccess  {String}  name    Name
- * @apiSuccess  {String}  secret  Authorization secret
- * @apiSuccess  {String}  project Unique ID of project
+ * @apiSuccess  {String}  _id         Unique ID
+ * @apiSuccess  {String}  name        Name
+ * @apiSuccess  {String}  project     Unique ID of project
+ * @apiSuccess  {String}  environment Environment of the service
  *
  * @apiUse UnauthorizedError
  *
  * @apiPermission user
  */
-router.get('/', (req, res, next) => {
+router.get('/:serviceId', (req, res, next) => {
   if (!req.session.user) {
     next(new Errors.Unauthorized());
   } else {
     Service.findById(req.params.serviceId)
       .then((service) => {
-        res.body = service;
+        res.body = {
+          _id: service._id,
+          name: service.name,
+          project: service.project,
+          environment: service.environment,
+        };
         next();
       })
       .catch(next);
@@ -110,11 +120,13 @@ router.post('/', (req, res, next) => {
       environment: req.body.environment,
       project: req.body.project,
     });
-    service.save()
-      .then((newService) => {
-        res.body = newService;
-        next();
-      })
+    service.updateSecret()
+      .then(secret => service.save()
+        .then((newService) => {
+          res.body = newService;
+          res.body.secret = secret;
+          next();
+        }))
       .catch(next);
   }
 });
@@ -179,6 +191,35 @@ router.delete('/:serviceId', (req, res, next) => {
       .then(() => {
         res.status(204);
         next();
+      })
+      .catch(next);
+  }
+});
+
+/**
+ * @api {post} /services/:serviceId/secret Generate a new secret
+ * @apiName PostServiceIdSecret
+ * @apiGroup Services
+ * @apiVersion 0.1.0
+ *
+ * @apiSuccess  {String}  secret  New service secret
+ *
+ * @apiUse UnauthorizedError
+ *
+ * @apiPermission user
+ */
+router.post('/:serviceId/secret', (req, res, next) => {
+  if (!req.session.user) {
+    next(new Errors.Unauthorized());
+  } else {
+    Service.findById(req.params.serviceId)
+      .then((service) => {
+        service.updateSecret()
+          .then(secret => service.save()
+              .then(() => {
+                res.body = { secret };
+                next();
+              }));
       })
       .catch(next);
   }
