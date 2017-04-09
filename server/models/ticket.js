@@ -13,10 +13,11 @@ const Comment = new Schema({
 });
 
 Comment.pre('save', (next) => {
+  const currentTime = new Date();
   if (!this.created) {
-    this.created = new Date();
+    this.created = currentTime;
   }
-  this.updated = new Date();
+  this.updated = currentTime;
   next();
 });
 
