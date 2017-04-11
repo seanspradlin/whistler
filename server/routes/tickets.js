@@ -213,7 +213,8 @@ router.get('/:ticketId/comments', (req, res, next) => {
  * @apiGroup Tickets
  * @apiVersion 0.1.0
  *
- * @apiParam  {String}  message Message contents for comment
+ * @apiParam  {String}  ticketId  ID of the ticket
+ * @apiParam  {String}  message   Message contents for comment
  *
  * @apiSuccess  {String}  _id     Comment ID
  * @apiSuccess  {String}  body    Comment contents
@@ -255,10 +256,34 @@ router.post('/:ticketId/comments', (req, res, next) => {
  * @apiGroup Tickets
  * @apiVersion 0.1.0
  *
+ * @apiParam  {String}  ticketId  ID of the ticket
+ * @apiParam  {String}  commentId ID of the comment
+ * @apiParam  {String}  message   Message contents for comment
+ *
  * @apiUse UnauthorizedError
  *
  * @apiPermission user
  */
+router.put('/:ticketId/comments/:commentId', (req, res, next) => {
+  if (!req.session.user) {
+    next(new Errors.Unauthorized());
+  } else {
+    Ticket.findById(req.params.ticketId)
+      .then((ticket) => {
+        const comment = ticket.comments.id(req.params.commentId);
+        if (!comment || comment.author.toString() !== req.session.user._id) {
+          return Promise.reject(new Errors.Unauthorized());
+        }
+        comment.body = req.body.message;
+        return comment.save();
+      })
+      .then((comment) => {
+        res.body = comment;
+        next();
+      })
+      .catch(next);
+  }
+});
 
 /**
  * @api {delete} /tickets/:ticketId/comments/:commentId Delete a ticket comment
