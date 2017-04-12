@@ -251,6 +251,41 @@ router.post('/:ticketId/comments', (req, res, next) => {
 });
 
 /**
+ * @api {get} /tickets/:ticketId/comments/:commentId Get a ticket comment
+ * @apiName GetTicketsIdCommentId
+ * @apiGroup Tickets
+ * @apiVersion 0.1.0
+ *
+ * @apiParam  {String}  ticketId  ID of the ticket
+ * @apiParam  {String}  commentId ID of the comment
+ *
+ * @apiSuccess  {Object}  author          Author data
+ * @apiSuccess  {String}  author._id      ID of author
+ * @apiSuccess  {String}  author.name     Name of author
+ * @apiSuccess  {String}  author.picture  Picture of author
+ * @apiSuccess  {String}  _id             ID of comment
+ * @apiSuccess  {String}  body            Body content of comment
+ * @apiSuccess  {Date}    created         Comment creation date
+ * @apiSuccess  {Date}    updated         Comment update date
+ *
+ * @apiUse UnauthorizedError
+ *
+ * @apiPermission user
+ */
+router.get('/:ticketId/comments/:commentId', (req, res, next) => {
+  if (!req.session.user) {
+    next(new Errors.Unauthorized());
+  } else {
+    Ticket.findById(req.params.ticketId)
+      .then((ticket) => {
+        res.body = ticket.comments.id(req.params.commentId);
+        next();
+      })
+      .catch(next);
+  }
+});
+
+/**
  * @api {put} /tickets/:ticketId/comments/:commentId Update a ticket comment
  * @apiName PutTicketsIdCommentId
  * @apiGroup Tickets
@@ -275,6 +310,7 @@ router.put('/:ticketId/comments/:commentId', (req, res, next) => {
           return Promise.reject(new Errors.Unauthorized());
         }
         comment.body = req.body.message;
+        comment.updated = new Date();
         return ticket.save();
       })
       .then((ticket) => {
