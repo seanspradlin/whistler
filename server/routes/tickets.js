@@ -275,10 +275,10 @@ router.put('/:ticketId/comments/:commentId', (req, res, next) => {
           return Promise.reject(new Errors.Unauthorized());
         }
         comment.body = req.body.message;
-        return comment.save();
+        return ticket.save();
       })
-      .then((comment) => {
-        res.body = comment;
+      .then((ticket) => {
+        res.body = ticket.comments.id(req.params.commentId);
         next();
       })
       .catch(next);
