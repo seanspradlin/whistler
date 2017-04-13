@@ -324,7 +324,7 @@ router.put('/:ticketId/comments/:commentId', (req, res, next) => {
 /**
  * @api {delete} /tickets/:ticketId/comments/:commentId Delete a ticket comment
  * @apiName DeleteTicketsIdCommentId
- * @apiGroup Ticket
+ * @apiGroup Tickets
  * @apiVersion 0.1.0
  *
  * @apiParam  {String}  ticketId  ID of the ticket
