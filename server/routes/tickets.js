@@ -327,10 +327,29 @@ router.put('/:ticketId/comments/:commentId', (req, res, next) => {
  * @apiGroup Ticket
  * @apiVersion 0.1.0
  *
+ * @apiParam  {String}  ticketId  ID of the ticket
+ * @apiParam  {String}  commentId ID of the comment
+ *
  * @apiUse UnauthorizedError
  *
  * @apiPermission user
  */
+router.delete('/:ticketId/comments/:commentId', (req, res, next) => {
+  if (!req.session.user) {
+    next(new Errors.Unauthorized());
+  } else {
+    Ticket.findById(req.params.ticketId)
+      .then((ticket) => {
+        ticket.comments.id(req.params.commentId).remove();
+        return ticket.save();
+      })
+      .then(() => {
+        res.status(204);
+        next();
+      })
+      .catch(next);
+  }
+});
 
 module.exports = router;
 
