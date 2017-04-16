@@ -184,7 +184,6 @@ router.delete('/:ticketId', (req, res, next) => {
  *
  * @apiParam  {String}  ticketId
  *
- * @apiSuccess  {Object[]}
  * @apiSuccess  {String}  _id     Comment ID
  * @apiSuccess  {String}  body    Comment contents
  * @apiSuccess  {Date}    created Creation time
