@@ -3,6 +3,7 @@
 import Vue from 'vue';
 import VueResource from 'vue-resource';
 import App from './App';
+import store from './store';
 import router from './router';
 
 Vue.config.productionTip = false;
@@ -16,6 +17,7 @@ new Vue({
     root: '/api',
   },
   router,
+  store,
   template: '<App/>',
   components: { App },
 });
