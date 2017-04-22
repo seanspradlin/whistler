@@ -1,5 +1,13 @@
 <template lang="pug">
 div#app
+  nav
+    ul
+      li: router-link(to="login") Login
+      li: router-link(to="logout") Logout
+      li: router-link(to="account") Account
+      li: router-link(to="projects") Projects
+      li: router-link(to="services") Services
+      li: router-link(to="users") Users
   img(src="./assets/logo.png")
   router-view
 </template>
