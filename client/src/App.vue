@@ -1,12 +1,12 @@
 <template lang="pug">
 div#app
   nav
-    ul(v-if="loggedIn")
-      li: router-link(to="logout") Logout
-      li: router-link(to="account") Account
+    ul(v-if="account.name")
+      li: router-link(to="account") {{ account.name }}
       li: router-link(to="projects") Projects
       li: router-link(to="services") Services
       li: router-link(to="users") Users
+      li: router-link(to="logout") Logout
     ul(v-else)
       li: router-link(to="login") Login
   img(src="./assets/logo.png")
@@ -14,13 +14,11 @@ div#app
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   name: 'app',
-  data() {
-    return {
-      loggedIn: true,
-    };
-  },
+  computed: mapState(['account']),
 };
 </script>
 
