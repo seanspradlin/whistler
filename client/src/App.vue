@@ -19,6 +19,9 @@ import { mapState } from 'vuex';
 export default {
   name: 'app',
   computed: mapState(['account']),
+  mounted() {
+    this.$store.commit('getAccount');
+  },
 };
 </script>
 
