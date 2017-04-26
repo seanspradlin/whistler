@@ -1,7 +1,6 @@
 const state = {
   name: null,
   picture: null,
-  googleId: null,
   _id: null,
 };
 
@@ -11,18 +10,24 @@ const actions = {};
 
 const mutations = {
   getAccount(value) {
-    const stored = window.localStorage.getItem('account');
+    const stored = window.localStorage.getItem('session');
     if (stored) {
-      const account = JSON.parse(stored);
-      /* eslint-disable no-param-reassign */
-      value.name = account.name;
-      value.picture = account.picture;
-      value._id = account._id;
+      const session = JSON.parse(stored);
+      if (new Date(session.cookie.expires) > new Date()) {
+        /* eslint-disable no-param-reassign */
+        value.name = session.user.name;
+        value.picture = session.user.picture;
+        value._id = session.user._id;
+      } else {
+        value.name = null;
+        value.picture = null;
+        value._id = null;
+      }
     }
   },
 
   setAccount(value, payload) {
-    window.localStorage.setItem('account', JSON.stringify(payload));
+    window.localStorage.setItem('session', JSON.stringify(payload));
     /* eslint-disable no-param-reassign */
     value.name = payload.name;
     value.picture = payload.picture;

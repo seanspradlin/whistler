@@ -99,7 +99,7 @@ router.post('/google', (req, res, next) => {
     })
     .then((user) => {
       req.session.user = user;
-      res.body = user;
+      res.body = req.session;
       next();
     })
     .catch(next);
