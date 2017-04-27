@@ -6,7 +6,7 @@ div#app
       li: router-link(to="projects") Projects
       li: router-link(to="services") Services
       li: router-link(to="users") Users
-      li: router-link(to="logout") Logout
+      li: a(v-on:click="logout") Logout
     ul(v-else)
       li: router-link(to="login") Login
   img(src="./assets/logo.png")
@@ -19,6 +19,14 @@ import { mapState } from 'vuex';
 export default {
   name: 'app',
   computed: mapState(['account']),
+  methods: {
+    logout() {
+      this.$http.post('/api/account/logout')
+        .then(() => {
+          this.$store.commit('clearAccount');
+        });
+    },
+  },
   mounted() {
     this.$store.commit('getAccount');
   },

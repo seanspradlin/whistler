@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 const state = {
   name: null,
   picture: null,
@@ -29,9 +30,16 @@ const mutations = {
   setAccount(value, payload) {
     window.localStorage.setItem('session', JSON.stringify(payload));
     /* eslint-disable no-param-reassign */
-    value.name = payload.name;
-    value.picture = payload.picture;
-    value._id = payload._id;
+    value.name = payload.user.name;
+    value.picture = payload.user.picture;
+    value._id = payload.user._id;
+  },
+
+  clearAccount(value) {
+    value.name = null;
+    value.picture = null;
+    value._id = null;
+    window.localStorage.setItem('session', null);
   },
 };
 
