@@ -6,39 +6,23 @@ div#app
       li: router-link(to="projects") Projects
       li: router-link(to="services") Services
       li: router-link(to="users") Users
-      li: a(v-on:click="logout") Logout
+      li: logout
     ul(v-else)
-      li: a(ref="signInButton") Login
+      li: login
   img(src="./assets/logo.png")
   router-view
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import Login from './components/Login';
+import Logout from './components/Logout';
 
 export default {
   name: 'app',
+  components: { Login, Logout },
   computed: mapState(['account']),
-  methods: {
-    logout() {
-      this.$http.post('/api/account/logout')
-        .then(() => {
-          this.$store.commit('clearAccount');
-        });
-    },
-  },
   mounted() {
-    const self = this;
-    window.gapi.load('auth2', () => {
-      const auth2 = window.gapi.auth2.init();
-      auth2.attachClickHandler(this.$refs.signInButton, {}, (googleUser) => {
-        const token = googleUser.getAuthResponse().id_token;
-        this.$http.post('/api/account/google', { token })
-          .then((response) => {
-            self.$store.commit('setAccount', response.body);
-          });
-      });
-    });
     this.$store.commit('getAccount');
   },
 };

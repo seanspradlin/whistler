@@ -1,7 +1,5 @@
 <template lang="pug">
-  .login
-    h1 Login
-    div(ref="signInButton") sign in
+  div(ref="signInButton") Login
 </template>
 
 <script>
