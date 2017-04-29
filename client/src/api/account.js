@@ -1,3 +1,5 @@
+import 'whatwg-fetch';
+
 export default {
   getAccount() {
     return Promise.reject(new Error('not implemented'));
@@ -8,7 +10,7 @@ export default {
   },
 
   logout() {
-    return Promise.reject(new Error('not implemented'));
+    return fetch('/api/account/logout', { method: 'POST' });
   },
 };
 

@@ -1,4 +1,6 @@
 /* eslint-disable no-param-reassign */
+import account from '../../api/account';
+
 export default {
   state: {
     name: null,
@@ -6,7 +8,13 @@ export default {
     _id: null,
   },
   getters: {},
-  actions: {},
+  actions: {
+    logout({ commit }) {
+      account.logout()
+        .then(() => commit('clearAccount'))
+        .catch(() => commit('clearAccount'));
+    },
+  },
   mutations: {
     getAccount(state) {
       const stored = window.localStorage.getItem('session');

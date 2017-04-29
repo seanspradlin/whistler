@@ -3,15 +3,12 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
   name: 'logout',
   methods: {
-    logout() {
-      this.$http.post('/api/account/logout')
-        .then(() => {
-          this.$store.commit('clearAccount');
-        });
-    },
+    ...mapActions(['logout']),
   },
 };
 </script>
