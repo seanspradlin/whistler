@@ -9,6 +9,11 @@ export default {
   },
   getters: {},
   actions: {
+    login({ commit }, token) {
+      account.login(token)
+        .then(response => commit('setAccount', response))
+        .catch(() => commit('clearAccount'));
+    },
     logout({ commit }) {
       account.logout()
         .then(() => commit('clearAccount'))
@@ -45,7 +50,7 @@ export default {
       state.name = null;
       state.picture = null;
       state._id = null;
-      window.localStorage.setItem('session', null);
+      window.localStorage.removeItem('session');
     },
   },
 };

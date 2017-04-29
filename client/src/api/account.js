@@ -2,11 +2,18 @@ import 'whatwg-fetch';
 
 export default {
   getAccount() {
-    return Promise.reject(new Error('not implemented'));
+    return fetch('/api/account');
   },
 
-  login() {
-    return Promise.reject(new Error('not implemented'));
+  login(token) {
+    return fetch('/api/account/google', {
+      method: 'POST',
+      body: JSON.stringify({ token }),
+      headers: {
+        'content-type': 'application/json',
+      },
+    })
+      .then(response => response.json());
   },
 
   logout() {
