@@ -1,3 +1,6 @@
+const dotenv = require('dotenv');
+dotenv.load();
+
 module.exports = {
   env: process.env.NODE_ENV || 'development',
   db: process.env.MONGO_URL || 'mongodb://mongo/whistler',
