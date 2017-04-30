@@ -1,5 +1,5 @@
 <template lang="pug">
-  a(v-on:click="logout") Logout
+  i.fa.fa-lg.fa-sign-out(aria-hidden="true" v-on:click="logout")
 </template>
 
 <script>
@@ -12,4 +12,10 @@ export default {
   },
 };
 </script>
+
+<style>
+i.fa:hover {
+  color: #F00;
+}
+</style>
 
