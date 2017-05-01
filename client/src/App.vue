@@ -18,11 +18,10 @@ div
 <script>
 import { mapState, mapActions } from 'vuex';
 import Login from './components/Login';
-import Logout from './components/Logout';
 
 export default {
   name: 'app',
-  components: { Login, Logout },
+  components: { Login },
   computed: mapState(['account']),
   methods: mapActions(['logout']),
   mounted() {
