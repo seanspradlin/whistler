@@ -2,7 +2,6 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Home from '@/components/Home';
 import Account from '@/components/Account';
-import Login from '@/components/Login';
 import Projects from '@/components/Projects';
 import Services from '@/components/Services';
 import Users from '@/components/Users';
@@ -21,11 +20,6 @@ export default new Router({
       path: '/account',
       name: 'Account',
       component: Account,
-    },
-    {
-      path: '/login',
-      name: 'Login',
-      component: Login,
     },
     {
       path: '/projects',

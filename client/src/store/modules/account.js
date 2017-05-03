@@ -9,10 +9,14 @@ export default {
   },
   getters: {},
   actions: {
-    login({ commit }, token) {
-      account.login(token)
-        .then(response => commit('setAccount', response))
-        .catch(() => commit('clearAccount'));
+    login({ commit }) {
+      const auth2 = window.gapi.auth2.init();
+      auth2.signIn({})
+          .then((googleUser) => {
+            const token = googleUser.getAuthResponse().id_token;
+            return account.login(token)
+              .then(response => commit('setAccount', response));
+          }, () => commit('clearAccount'));
     },
     logout({ commit }) {
       account.logout()
