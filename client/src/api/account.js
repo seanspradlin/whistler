@@ -2,7 +2,8 @@ import 'whatwg-fetch';
 
 export default {
   getAccount() {
-    return fetch('/api/account');
+    return fetch('/api/account')
+      .then(response => response.json());
   },
 
   login(token) {
