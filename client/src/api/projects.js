@@ -1,5 +1,5 @@
 export default {
-  getProjects({ name }) {
+  get({ name }) {
     let uri = '/api/projects?';
     if (name) {
       uri += `email=${name}`;
@@ -8,13 +8,13 @@ export default {
       .then(response => response.json());
   },
 
-  getProjectById(id) {
+  getById(id) {
     const uri = `/api/projects/${id}`;
     return fetch(uri)
       .then(response => response.json());
   },
 
-  createProject({ name }) {
+  create({ name }) {
     return fetch('/api/projects', {
       method: 'POST',
       body: JSON.stringify({ name }),
@@ -25,7 +25,7 @@ export default {
       .then(response => response.json());
   },
 
-  updateProject(id, { name }) {
+  update(id, { name }) {
     return fetch(`/api/projects/${id}`, {
       method: 'PUT',
       body: JSON.stringify({ name }),
@@ -36,7 +36,7 @@ export default {
       .then(response => response.json());
   },
 
-  deleteProject(id) {
+  delete(id) {
     return fetch(`/api/projects/${id}`, {
       method: 'DELETE',
     });
