@@ -3,31 +3,42 @@ import projects from '../../api/projects';
 
 export default {
   state: {
-    projects: null,
-    currentProject: null,
+    projects: [],
+    currentProjectId: null,
+    error: null,
   },
-  getters: {},
+  getters: {
+    currentProject(state) {
+      return state.projects.find(p => p._id === state.currentProjectId);
+    },
+  },
   actions: {
     getProjects({ commit }, { name }) {
       projects.get({ name })
-        .then(results => commit('setProjects', results));
+        .then(results => commit('addProjects', results));
     },
     getProjectById({ commit, state }, id) {
-      const project = state.projects.find(p => p._id === id);
-      if (project) {
-        commit('setProject', project);
+      projects.getById(id)
+        .then(result => commit('addProject', result));
+    },
+    createProject({ commit }, { name }) {
+      if (!name) {
+        commit('setProjectError', 'Project name is required');
       } else {
-        projects.getById(id)
-          .then(result => commit('setProject', result));
+        projects.create({ name })
+          .then(result => commit('addProject', result));
       }
     },
   },
   mutations: {
-    setProjects(state, payload) {
-      state.projects = payload;
+    addProject(state, payload) {
+      state.projects.push(payload);
     },
-    setProject(state, payload) {
-      state.currentProject = payload;
+    addProjects(state, payload) {
+      state.projects.concat(payload);
+    },
+    setProjectError(state, payload) {
+      state.error = payload;
     },
   },
 };

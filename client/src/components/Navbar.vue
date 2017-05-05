@@ -1,10 +1,10 @@
 <template lang="pug">
   nav.container
     ul(v-if="account.name")
-      li: router-link(to="projects") Projects
-      li: router-link(to="services") Services
-      li: router-link(to="users") Users
-      li: router-link(to="account") {{ account.name }}
+      li: router-link(to="/projects") Projects
+      li: router-link(to="/services") Services
+      li: router-link(to="/users") Users
+      li: router-link(to="/account") {{ account.name }}
       li: a(v-on:click="logout") Logout
     ul(v-else)
       li: a(v-on:click="login") Login
