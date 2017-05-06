@@ -6,6 +6,7 @@ import CreateProject from '@/components/CreateProject';
 import Projects from '@/components/Projects';
 import Services from '@/components/Services';
 import Users from '@/components/Users';
+import ViewProject from '@/components/ViewProject';
 
 Vue.use(Router);
 
@@ -31,6 +32,11 @@ export default new Router({
       path: '/projects/new',
       name: 'CreateProject',
       component: CreateProject,
+    },
+    {
+      path: '/projects/:projectId',
+      name: 'ViewProject',
+      component: ViewProject,
     },
     {
       path: '/services',

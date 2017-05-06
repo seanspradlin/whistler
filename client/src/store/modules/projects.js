@@ -35,7 +35,7 @@ export default {
       state.projects.push(payload);
     },
     addProjects(state, payload) {
-      state.projects.concat(payload);
+      state.projects = state.projects.concat(payload);
     },
     setProjectError(state, payload) {
       state.error = payload;
