@@ -13,6 +13,7 @@ export default {
       headers: {
         'content-type': 'application/json',
       },
+      credentials: 'same-origin',
     })
       .then(response => response.json());
   },

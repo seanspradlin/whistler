@@ -4,13 +4,13 @@ export default {
     if (name) {
       uri += `email=${name}`;
     }
-    return fetch(uri, { credentials: 'include' })
+    return fetch(uri, { credentials: 'same-origin' })
       .then(response => response.json());
   },
 
   getById(id) {
     const uri = `/api/projects/${id}`;
-    return fetch(uri, { credentials: 'include' })
+    return fetch(uri, { credentials: 'same-origin' })
       .then(response => response.json());
   },
 
@@ -21,7 +21,7 @@ export default {
       headers: {
         'content-type': 'application/json',
       },
-      credentials: 'include',
+      credentials: 'same-origin',
     })
       .then(response => response.json());
   },
@@ -33,7 +33,7 @@ export default {
       headers: {
         'content-type': 'application/json',
       },
-      credentials: 'include',
+      credentials: 'same-origin',
     })
       .then(response => response.json());
   },
@@ -41,7 +41,7 @@ export default {
   delete(id) {
     return fetch(`/api/projects/${id}`, {
       method: 'DELETE',
-      credentials: 'include',
+      credentials: 'same-origin',
     });
   },
 };
