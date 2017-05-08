@@ -12,7 +12,7 @@ module.exports = () =>
       logger.error({
         error: req,
       });
-      req.body = { error: 'Internal Error' };
+      res.body = { error: 'Internal Error' };
     }
     next();
   };
