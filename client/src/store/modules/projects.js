@@ -3,13 +3,13 @@ import projects from '../../api/projects';
 
 export default {
   state: {
-    projects: [],
+    projects: {},
     currentProjectId: null,
     error: null,
   },
   getters: {
     currentProject(state) {
-      return state.projects.find(p => p._id === state.currentProjectId);
+      return state.projects[state.currentProjectId];
     },
   },
   actions: {
@@ -32,10 +32,13 @@ export default {
   },
   mutations: {
     addProject(state, payload) {
+      state.projects[payload._id] = payload;
       state.projects.push(payload);
     },
     addProjects(state, payload) {
-      state.projects = state.projects.concat(payload);
+      payload.forEach((p) => {
+        state.projects[p._id] = p;
+      });
     },
     setProjectError(state, payload) {
       state.error = payload;
