@@ -1,8 +1,8 @@
 <template lang="pug">
   .container
-    .form
+    form(v-on:submit.prevent="save")
       input(v-model="name" placeholder="Project name...")
-      button(v-on:click="save") Save
+      input(type="submit" value="Save")
     router-link(to="/projects") Back to projects
 </template>
 
@@ -18,6 +18,7 @@ export default {
     save() {
       const project = { name: this.name };
       this.$store.dispatch('createProject', project);
+      this.$router.push({ name: 'Projects' });
     },
   },
 };

@@ -33,7 +33,6 @@ export default {
   mutations: {
     addProject(state, payload) {
       state.projects[payload._id] = payload;
-      state.projects.push(payload);
     },
     addProjects(state, payload) {
       payload.forEach((p) => {
