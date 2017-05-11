@@ -17,7 +17,7 @@ export default {
       projects.get({ name })
         .then(results => commit('addProjects', results));
     },
-    getProjectById({ commit, state }, id) {
+    getProjectById({ commit }, id) {
       projects.getById(id)
         .then(result => commit('addProject', result));
     },
@@ -32,12 +32,16 @@ export default {
   },
   mutations: {
     addProject(state, payload) {
-      state.projects[payload._id] = payload;
+      const container = { ...state.projects };
+      container[payload._id] = payload;
+      state.projects = container;
     },
     addProjects(state, payload) {
+      const container = { ...state.projects };
       payload.forEach((p) => {
-        state.projects[p._id] = p;
+        container[p._id] = p;
       });
+      state.projects = container;
     },
     setProjectError(state, payload) {
       state.error = payload;
