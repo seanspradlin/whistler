@@ -4,8 +4,6 @@ import projects from '../../api/projects';
 export default {
   state: {
     projects: {},
-    currentProjectId: null,
-    error: null,
   },
   getters: {
     currentProject(state) {
@@ -22,12 +20,8 @@ export default {
         .then(result => commit('addProject', result));
     },
     createProject({ commit }, { name }) {
-      if (!name) {
-        commit('setProjectError', 'Project name is required');
-      } else {
-        projects.create({ name })
-          .then(result => commit('addProject', result));
-      }
+      projects.create({ name })
+        .then(result => commit('addProject', result));
     },
   },
   mutations: {
@@ -42,9 +36,6 @@ export default {
         container[p._id] = p;
       });
       state.projects = container;
-    },
-    setProjectError(state, payload) {
-      state.error = payload;
     },
   },
 };
