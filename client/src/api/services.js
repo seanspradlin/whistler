@@ -1,22 +1,57 @@
 export default {
-  getServices(filter) {
-    return Promise.reject(new Error('not implemented'));
+  get({ name, environment, project }) {
+    let uri = '/api/services?';
+    if (name) {
+      uri += `name=${name}&`;
+    }
+
+    if (environment) {
+      uri += `environment=${environment}&`;
+    }
+
+    if (project) {
+      uri += `project=${project}&`;
+    }
+
+    return fetch(uri, { credentials: 'same-origin' })
+      .then(response => response.json());
   },
 
-  getServiceById(id) {
-    return Promise.reject(new Error('not implemented'));
+  getById(id) {
+    const uri = `/api/services/${id}`;
+    return fetch(uri, { credentials: 'same-origin' })
+      .then(response => response.json());
   },
 
-  createService({ name, env, project }) {
-    return Promise.reject(new Error('not implemented'));
+  create({ name, environment, project }) {
+    return fetch('/api/services', {
+      method: 'POST',
+      body: JSON.stringify({ name, environment, project }),
+      headers: {
+        'content-type': 'application/json',
+      },
+      credentials: 'same-origin',
+    })
+      .then(response => response.json());
   },
 
-  updateService(id, { name, env, project }) {
-    return Promise.reject(new Error('not implemented'));
+  update(id, { name, environment, project }) {
+    return fetch(`/api/services/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ name, environment, project }),
+      headers: {
+        'content-type': 'application/json',
+      },
+      credentials: 'same-origin',
+    })
+      .then(response => response.json());
   },
 
-  deleteProject(id) {
-    return Promise.reject(new Error('not implemented'));
+  delete(id) {
+    return fetch(`/api/services/${id}`, {
+      method: 'DELETE',
+      credentials: 'same-origin',
+    });
   },
 };
 

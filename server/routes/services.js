@@ -29,15 +29,15 @@ router.get('/', (req, res, next) => {
     next(new Errors.Unauthorized());
   } else {
     const options = {};
-    if (req.body.name) {
+    if (req.query.name) {
       options.name = req.body.name;
     }
 
-    if (req.body.environment) {
+    if (req.query.environment) {
       options.environment = req.body.environment;
     }
 
-    if (req.body.project) {
+    if (req.query.project) {
       options.project = req.body.project;
     }
 
