@@ -1,9 +1,11 @@
 /* eslint-disable no-param-reassign */
 import projects from '../../api/projects';
+import services from '../../api/services';
 
 export default {
   state: {
     projects: {},
+    services: [],
   },
   getters: {
     currentProject(state) {
@@ -11,6 +13,10 @@ export default {
     },
   },
   actions: {
+    getServices({ commit }, { name, environment, project }) {
+      services.get({ name, environment, project })
+        .then(results => commit('addServices', results));
+    },
     getProjects({ commit }, { name }) {
       projects.get({ name })
         .then(results => commit('addProjects', results));
@@ -25,6 +31,9 @@ export default {
     },
   },
   mutations: {
+    addServices(state, payload) {
+      state.services = state.services.concat(payload);
+    },
     addProject(state, payload) {
       const container = { ...state.projects };
       container[payload._id] = payload;
