@@ -7,11 +7,7 @@ export default {
     projects: {},
     services: [],
   },
-  getters: {
-    currentProject(state) {
-      return state.projects[state.currentProjectId];
-    },
-  },
+  getters: {},
   actions: {
     getServices({ commit }, { name, environment, project }) {
       services.get({ name, environment, project })
