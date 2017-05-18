@@ -13,6 +13,10 @@ export default {
       services.get({ name, environment, project })
         .then(results => commit('addServices', results));
     },
+    createService({ commit }, { name, environment, project }) {
+      services.create({ name, environment, project })
+        .then(result => commit('addService', result));
+    },
     getProjects({ commit }, { name }) {
       projects.get({ name })
         .then(results => commit('addProjects', results));
@@ -29,6 +33,9 @@ export default {
   mutations: {
     addServices(state, payload) {
       state.services = state.services.concat(payload);
+    },
+    addService(state, payload) {
+      state.services = state.services.push(payload);
     },
     addProject(state, payload) {
       const container = { ...state.projects };
