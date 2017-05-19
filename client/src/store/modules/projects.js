@@ -17,6 +17,10 @@ export default {
       services.create({ name, environment, project })
         .then(result => commit('addService', result));
     },
+    updateService({ commit  }, { id, name, environment, project }) {
+      services.update(id, { name, environment, project })
+        .then(result => commit('addService', result));
+    },
     getProjects({ commit }, { name }) {
       projects.get({ name })
         .then(results => commit('addProjects', results));
