@@ -1,6 +1,20 @@
 export default {
-  getTickets(filter) {
-    return Promise.reject(new Error('not implemented'));
+  get({ completed, created, updated }) {
+    let uri = '/api/tickets?';
+    if (completed) {
+      uri += `completed=${completed}&`;
+    }
+
+    if (created) {
+      uri += `created=${created}&`;
+    }
+
+    if (updated) {
+      uri += `updated=${updated}&`;
+    }
+
+    return fetch(uri, { credentials: 'same-origin' })
+      .then(response => response.json());
   },
 
   getTicketById(id) {
