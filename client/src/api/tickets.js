@@ -17,12 +17,17 @@ export default {
       .then(response => response.json());
   },
 
-  getTicketById(id) {
-    return Promise.reject(new Error('not implemented'));
+  getById(id) {
+    return fetch(`/api/tickets/${id}`, { credentials: 'same-origin' })
+      .then(response => response.json());
   },
 
-  closeTicket(id) {
-    return Promise.reject(new Error('not implemented'));
+  close(id) {
+    return fetch(`/api/tickets/${id}`, {
+      credentials: 'same-origin',
+      method: 'POST',
+    })
+      .then(response => response.json());
   },
 
   addComment(id, message) {
