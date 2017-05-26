@@ -10,6 +10,8 @@ const router = express.Router({ mergeParams: true });
  * @apiGroup Services
  * @apiVersion 0.1.0
  *
+ * @apiParam  {Number}  [page=1]      Current result set page
+ * @apiParam  {Number}  [limit=50]    Maximum result set size
  * @apiParam  {String}  [name]        Name
  * @apiParam  {String}  [environment] Current environment
  * @apiParam  {String}  [project]     Unique ID of project
@@ -28,20 +30,32 @@ router.get('/', (req, res, next) => {
   if (!req.session.user) {
     next(new Errors.Unauthorized());
   } else {
-    const options = {};
+    const options = { where: {} };
     if (req.query.name) {
-      options.name = req.body.name;
+      options.where.name = req.body.name;
     }
 
     if (req.query.environment) {
-      options.environment = req.body.environment;
+      options.where.environment = req.body.environment;
     }
 
     if (req.query.project) {
-      options.project = req.body.project;
+      options.where.project = req.body.project;
     }
 
-    Service.find(options)
+    if (req.query.limit && req.query.limit < 250) {
+      options.limit = +req.query.limit;
+    } else {
+      options.limit = 50;
+    }
+
+    if (req.query.page) {
+      options.offset = +req.query.page - 1;
+    } else {
+      options.offset = 0;
+    }
+
+    Service.findAll(options)
       .then((services) => {
         res.body = services.map(service => ({
           _id: service._id,
