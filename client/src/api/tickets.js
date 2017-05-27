@@ -39,7 +39,12 @@ export default {
   },
 
   addComment(id, message) {
-    return Promise.reject(new Error('not implemented'));
+    return fetch(`/api/tickets/${id}/comments`, {
+      credentials: 'same-origin',
+      method: 'POST',
+      body: message,
+    })
+      .then(response => response.json());
   },
 
   getAllComments(id) {

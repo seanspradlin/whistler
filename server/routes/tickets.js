@@ -13,6 +13,10 @@ const router = express.Router({ mergeParams: true });
  * @apiGroup Tickets
  * @apiVersion 0.1.0
  *
+ * @apiParam  {Number}  [page=1]    Current result set page
+ * @apiParam  {Number}  [limit=50]  Maximum result set size
+ * @apiParam  {String}  [service]   Service that ticket belongs to
+ *
  * @apiSuccess  {Object[]}  tickets
  * @apiSuccess  {String}    tickets.service
  * @apiSuccess  {Date}      tickets.created
@@ -33,12 +37,24 @@ router.get('/', (req, res, next) => {
   if (!req.session.user) {
     next(new Errors.Unauthorized());
   } else {
-    const options = {};
-    if (req.body.service_id) {
-      options.service = req.body.service_id;
+    const options = { where: {} };
+    if (req.query.service) {
+      options.where.service = req.query.service;
     }
 
-    Ticket.find(options)
+    if (req.query.limit && req.query.limit < 250) {
+      options.limit = +req.query.limit;
+    } else {
+      options.limit = 50;
+    }
+
+    if (req.query.page) {
+      options.offset = +req.query.page - 1;
+    } else {
+      options.offset = 0;
+    }
+
+    Ticket.findAll(options)
       .then((tickets) => {
         res.body = tickets;
         next();
