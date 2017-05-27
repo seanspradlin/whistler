@@ -1,5 +1,5 @@
 export default {
-  get({ completed, created, updated }) {
+  get({ completed, created, updated, limit, page }) {
     let uri = '/api/tickets?';
     if (completed) {
       uri += `completed=${completed}&`;
@@ -11,6 +11,14 @@ export default {
 
     if (updated) {
       uri += `updated=${updated}&`;
+    }
+
+    if (limit) {
+      uri += `limit=${limit}&`;
+    }
+
+    if (page) {
+      uri += `page=${page}&`;
     }
 
     return fetch(uri, { credentials: 'same-origin' })
