@@ -1,5 +1,5 @@
 <template lang="pug">
-  .container
+.container
   #services(v-for="value in services")
     div {{ value.name }}
 </template>
