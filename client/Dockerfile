@@ -6,7 +6,7 @@ WORKDIR /usr/src/static
 ARG NODE_ENV=development
 ENV NODE_ENV $NODE_ENV
 COPY package.json /usr/src/static
-RUN npm install && npm cache clean
+RUN npm install
 COPY . /usr/src/static
 EXPOSE 8000
 
