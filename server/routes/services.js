@@ -71,7 +71,7 @@ router.get('/', (req, res, next) => {
 
 /**
  * @api {get} /services/:serviceId Get a specific service
- * @apiName GetServices
+ * @apiName GetServicesById
  * @apiGroup Services
  * @apiVersion 0.1.0
  *
