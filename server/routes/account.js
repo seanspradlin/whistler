@@ -74,7 +74,7 @@ router.post('/logout', (req, res, next) => {
  *
  * @apiUse UnauthorizedError
  *
- * @apiPermission user
+ * @apiPermission public
  */
 router.post('/google', (req, res, next) => {
   redeemGoogleToken(req.body.token)
@@ -103,6 +103,49 @@ router.post('/google', (req, res, next) => {
       next();
     })
     .catch(next);
+});
+
+/**
+ * @api {post} /account/login
+ * @apiName PostAccountLogin
+ * @apiGroup Account
+ * @apiVersion 0.2.0
+ * @apiDescription Login with a local account
+ *
+ * @apiParam  {String}  email     User email account
+ * @apiParam  {String}  password  User password
+ *
+ * @apiSuccess  {String}  _id
+ * @apiSuccess  {String}  name
+ * @apiSuccess  {String}  email
+ * @apiSuccess  {String}  isAdmin
+ *
+ * @apiUse InvalidParametersError
+ * @apiUse UnauthorizedError
+ *
+ * @apiPermission public
+ */
+router.post('/login', (req, res, next) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    next(new Errors.Generic('email and password are required', 422));
+  } else {
+    User.findOne({ email })
+      .then((user) => {
+        if (!user.validPassword(password)) {
+          next(new Errors.Unauthorized());
+        }
+        req.session.user = user;
+        res.body = {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          isAdmin: user.isAdmin,
+        };
+        next();
+      })
+      .catch(next);
+  }
 });
 
 module.exports = router;
