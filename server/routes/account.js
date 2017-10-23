@@ -106,7 +106,7 @@ router.post('/google', (req, res, next) => {
 });
 
 /**
- * @api {post} /account/login
+ * @api {post} /account/login Login
  * @apiName PostAccountLogin
  * @apiGroup Account
  * @apiVersion 0.2.0
@@ -132,17 +132,18 @@ router.post('/login', (req, res, next) => {
   } else {
     User.findOne({ email })
       .then((user) => {
-        if (!user.validPassword(password)) {
+        if (!user || !user.validPassword(password)) {
           next(new Errors.Unauthorized());
+        } else {
+          req.session.user = user;
+          res.body = {
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            isAdmin: user.isAdmin,
+          };
+          next();
         }
-        req.session.user = user;
-        res.body = {
-          _id: user._id,
-          name: user.name,
-          email: user.email,
-          isAdmin: user.isAdmin,
-        };
-        next();
       })
       .catch(next);
   }
