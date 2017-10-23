@@ -1,4 +1,4 @@
-// http://eslint.org/docs/user-guide/configuring
+// https://eslint.org/docs/user-guide/configuring
 
 module.exports = {
   root: true,
@@ -34,8 +34,6 @@ module.exports = {
       'optionalDependencies': ['test/unit/index.js']
     }],
     // allow debugger during development
-    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
-    'linebreak-style': 0,
-    'no-underscore-dangle': 0,
+    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0
   }
 }

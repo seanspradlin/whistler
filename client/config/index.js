@@ -1,15 +1,13 @@
-// see http://vuejs-templates.github.io/webpack for documentation.
-const path = require('path');
-const dotenv = require('dotenv');
-const prodenv = require('./prod.env');
-const devenv = require('./dev.env');
 
-dotenv.load();
+'use strict'
+// Template version: 1.1.3
+// see http://vuejs-templates.github.io/webpack for documentation.
+
+const path = require('path')
 
 module.exports = {
   build: {
-    env: prodenv,
-    googleClientId: process.env.GOOGLE_CLIENT_ID || '',
+    env: require('./prod.env'),
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
@@ -25,11 +23,11 @@ module.exports = {
     // View the bundle analyzer report after build finishes:
     // `npm run build --report`
     // Set to `true` or `false` to always turn it on or off
-    bundleAnalyzerReport: process.env.npm_config_report,
+    bundleAnalyzerReport: process.env.npm_config_report
   },
   dev: {
-    env: devenv,
-    port: 8000,
+    env: require('./dev.env'),
+    port: process.env.PORT || 8000,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
@@ -39,6 +37,6 @@ module.exports = {
     // (https://github.com/webpack/css-loader#sourcemaps)
     // In our experience, they generally work as expected,
     // just be aware of this issue when enabling this option.
-    cssSourceMap: false,
-  },
-};
+    cssSourceMap: false
+  }
+}
