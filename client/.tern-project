@@ -1,0 +1,9 @@
+{
+  "plugins": {
+    "webpack": {}
+  },
+  "libs": [
+  ],
+  "ecmaVersion": 6
+}
+
